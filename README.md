@@ -131,4 +131,4 @@ fbadmin claims get --email user@example.com -f json  # Single record as JSON
 
 ## License
 
-MIT
+AGPL-3.0-only — see [LICENSE](LICENSE).
