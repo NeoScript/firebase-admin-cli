@@ -1,11 +1,11 @@
-# Releasing fbadmin
+# Releasing fire-auth
 
 Releases are automated via [cargo-dist](https://opensource.axo.dev/cargo-dist/). Pushing a semver tag triggers GitHub Actions which builds binaries, creates a GitHub Release, and publishes a Homebrew formula.
 
 ## Prerequisites
 
-- Push access to `NeoScript/firebase-admin-cli`
-- `HOMEBREW_TAP_TOKEN` repo secret set on `firebase-admin-cli` — a fine-grained PAT with **Contents: Read and write** on `NeoScript/homebrew-fbadmin`
+- Push access to `NeoScript/firebase-auth-cli`
+- `HOMEBREW_TAP_TOKEN` repo secret set on `firebase-auth-cli` — a fine-grained PAT with **Contents: Read and write** on `NeoScript/homebrew-fire-auth`
 
 ## Release checklist
 
@@ -45,7 +45,7 @@ Releases are automated via [cargo-dist](https://opensource.axo.dev/cargo-dist/).
    git push origin main --tags
    ```
 
-6. **Monitor** the Release workflow at https://github.com/NeoScript/firebase-admin-cli/actions
+6. **Monitor** the Release workflow at https://github.com/NeoScript/firebase-auth-cli/actions
 
 ## What the workflow does
 
@@ -60,7 +60,7 @@ The `release.yml` workflow:
    - `x86_64-pc-windows-msvc` (Windows x64)
 3. **build-global-artifacts** — generates shell/powershell installer scripts and checksums
 4. **host** — creates the GitHub Release and uploads all artifacts
-5. **publish-homebrew-formula** — pushes a `.rb` formula to `NeoScript/homebrew-fbadmin`
+5. **publish-homebrew-formula** — pushes a `.rb` formula to `NeoScript/homebrew-fire-auth`
 6. **announce** — finalizes the release
 
 ## Configuration
@@ -73,7 +73,7 @@ cargo-dist-version = "0.31.0"
 ci = "github"
 installers = ["shell", "powershell", "homebrew"]
 targets = [...]
-tap = "NeoScript/homebrew-fbadmin"
+tap = "NeoScript/homebrew-fire-auth"
 publish-jobs = ["homebrew"]
 ```
 
@@ -96,6 +96,6 @@ To change targets, installers, or upgrade cargo-dist, edit this file and run `di
   git push origin vX.Y.Z
   ```
 
-- **Homebrew publish failed**: verify the `HOMEBREW_TAP_TOKEN` secret is set and the PAT hasn't expired. The token needs **Contents: Read and write** on `NeoScript/homebrew-fbadmin`.
+- **Homebrew publish failed**: verify the `HOMEBREW_TAP_TOKEN` secret is set and the PAT hasn't expired. The token needs **Contents: Read and write** on `NeoScript/homebrew-fire-auth`.
 
 - **Build failed for a target**: check the build logs in GitHub Actions. Common causes are missing system deps for cross-compilation or Rust version mismatches.

@@ -104,7 +104,7 @@ async fn add(
     {
         bail!(
             "At least one of --project, --credentials, or --emulator-host is required.\n\
-             Use 'fbadmin config init' for an interactive wizard."
+             Use 'fire-auth config init' for an interactive wizard."
         );
     }
 
@@ -152,7 +152,7 @@ async fn list(cli: &Cli) -> Result<()> {
     let config = load_config()?;
 
     if config.profiles.is_empty() {
-        render_message("No profiles configured. Run 'fbadmin config init' to create one.");
+        render_message("No profiles configured. Run 'fire-auth config init' to create one.");
         return Ok(());
     }
 
@@ -267,7 +267,7 @@ async fn path(_cli: &Cli) -> Result<()> {
     let global_path = config_dir()?;
     render_message(&format!("Global: {}", global_path.display()));
 
-    let local_path = std::path::PathBuf::from(".fbadmin.toml");
+    let local_path = std::path::PathBuf::from(".fire-auth.toml");
     if local_path.exists() {
         render_message(&format!("Local:  {}", local_path.display()));
     } else {

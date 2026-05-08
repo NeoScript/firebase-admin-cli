@@ -1,12 +1,16 @@
 [package]
-name = "fbadmin"
-version = "0.1.0"
+name = "firebase-auth-cli"
+version = "0.2.0"
 edition = "2024"
 rust-version = "1.94"
 description = "Firebase Auth administration CLI"
 license = "AGPL-3.0-only"
-repository = "https://github.com/NeoScript/firebase-admin-cli"
-homepage = "https://github.com/NeoScript/firebase-admin-cli"
+repository = "https://github.com/NeoScript/firebase-auth-cli"
+homepage = "https://github.com/NeoScript/firebase-auth-cli"
+
+[[bin]]
+name = "fire-auth"
+path = "src/main.rs"
 
 [dependencies]
 anyhow = "1"

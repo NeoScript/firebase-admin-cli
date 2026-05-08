@@ -11,7 +11,7 @@ use clap::{ArgAction, Parser, Subcommand, ValueEnum};
 
 #[derive(Parser)]
 #[command(
-    name = "fbadmin",
+    name = "fire-auth",
     version,
     long_version = const_format::formatcp!(
         "{}\n{} ({})",
@@ -25,18 +25,18 @@ pub struct Cli {
     #[arg(
         long,
         short = 'p',
-        env = "FBADMIN_PROFILE",
+        env = "FIRE_AUTH_PROFILE",
         help = "Use a named profile from config"
     )]
     pub profile: Option<String>,
 
-    #[arg(long, env = "FBADMIN_PROJECT", help = "Firebase project ID (uses ADC)")]
+    #[arg(long, env = "FIRE_AUTH_PROJECT", help = "Firebase project ID (uses ADC)")]
     pub project: Option<String>,
 
     #[arg(
         long,
         short = 'c',
-        env = "FBADMIN_CREDENTIALS",
+        env = "FIRE_AUTH_CREDENTIALS",
         help = "Path to service account JSON"
     )]
     pub credentials: Option<String>,
@@ -44,7 +44,7 @@ pub struct Cli {
     #[arg(
         long,
         short = 'e',
-        env = "FBADMIN_EMULATOR_HOST",
+        env = "FIRE_AUTH_EMULATOR_HOST",
         help = "Connect to emulator (host:port)"
     )]
     pub emulator_host: Option<String>,
@@ -263,7 +263,7 @@ fn init_logging(verbose: u8) {
         2 => "debug",
         _ => "trace",
     };
-    let filter = tracing_subscriber::EnvFilter::new(format!("fbadmin={level}"));
+    let filter = tracing_subscriber::EnvFilter::new(format!("fire_auth={level}"));
     tracing_subscriber::fmt()
         .with_env_filter(filter)
         .with_writer(std::io::stderr)

@@ -2,7 +2,7 @@
 
 ## Project overview
 
-**fbadmin** is a Rust CLI for Firebase Authentication administration. It wraps the `rs-firebase-admin-sdk` crate and provides subcommands for user management, custom claims, auth action links, and emulator utilities.
+**fire-auth** is a Rust CLI for Firebase Authentication administration. It wraps the `rs-firebase-admin-sdk` crate and provides subcommands for user management, custom claims, auth action links, and emulator utilities.
 
 ## Repository layout
 
@@ -33,7 +33,7 @@ Cargo.toml          # Dependencies, package metadata, profiles
 - **Error handling**: SDK calls return `Result<T, error_stack::Report<ApiClientError>>`. Use the `IntoAnyhow` trait (`.into_anyhow()`) to convert, then chain `.context("human-readable message")` for user-facing errors.
 - **Interactive prompts**: When a required arg is `None`, command modules call `prompt::resolve_email()` or similar. These use `dialoguer` and are TTY-aware.
 - **Output**: Always go through `output.rs` helpers (`render_single_record`, `render_table`, `render_success`, etc.) — they handle `--format` switching (table/json/csv) and colored output.
-- **Config resolution**: Profile is resolved from CLI flag → `FBADMIN_PROFILE` env → `default_profile` in config. Connection merges profile settings with CLI overrides. See `config::resolve_connection()`.
+- **Config resolution**: Profile is resolved from CLI flag → `FIRE_AUTH_PROFILE` env → `default_profile` in config. Connection merges profile settings with CLI overrides. See `config::resolve_connection()`.
 - **Firebase init**: `firebase::init_firebase()` takes an `AuthBackend` enum (Emulator or Live with optional credentials/project). The `build_auth` helper in command modules wires config → AuthBackend → FirebaseAuth.
 - **Logging**: `tracing` with `tracing-subscriber`. Controlled by `-v` flag count. Logs go to stderr. Use `tracing::debug!` for internal details, `tracing::info!` for notable operations.
 
