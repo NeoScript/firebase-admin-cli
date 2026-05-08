@@ -1,3 +1,13 @@
+# v0.2.0
+
+Renamed from `fbadmin` to `fire-auth`.
+
+- **Binary**: `fbadmin` → `fire-auth`
+- **Package**: `fbadmin` → `firebase-auth-cli`
+- **Env vars**: `FBADMIN_*` → `FIRE_AUTH_*`
+- **Config**: confy app name `fire-auth`, local override `.fire-auth.toml`
+- **Homebrew tap**: `NeoScript/homebrew-fbadmin` → `NeoScript/homebrew-fire-auth`
+
 # v0.1.0
 
 Initial release of fbadmin — Firebase Auth administration CLI.

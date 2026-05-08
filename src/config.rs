@@ -5,7 +5,7 @@ use anyhow::{Context, Result, bail};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Default, Clone)]
-pub struct FbadminConfig {
+pub struct FireAuthConfig {
     pub default_profile: Option<String>,
     #[serde(default)]
     pub profiles: HashMap<String, Profile>,
@@ -27,26 +27,26 @@ pub struct ResolvedConnection {
 }
 
 pub fn config_dir() -> Result<PathBuf> {
-    let path = confy::get_configuration_file_path("fbadmin", "config")
+    let path = confy::get_configuration_file_path("fire-auth", "config")
         .context("Failed to determine config path")?;
     Ok(path)
 }
 
-pub fn load_config() -> Result<FbadminConfig> {
-    let global: FbadminConfig =
-        confy::load("fbadmin", "config").context("Failed to load global config")?;
+pub fn load_config() -> Result<FireAuthConfig> {
+    let global: FireAuthConfig =
+        confy::load("fire-auth", "config").context("Failed to load global config")?;
 
-    let local_path = PathBuf::from(".fbadmin.toml");
+    let local_path = PathBuf::from(".fire-auth.toml");
     if local_path.exists() {
-        let local: FbadminConfig =
-            confy::load_path(&local_path).context("Failed to load local config (.fbadmin.toml)")?;
+        let local: FireAuthConfig =
+            confy::load_path(&local_path).context("Failed to load local config (.fire-auth.toml)")?;
         Ok(merge_configs(global, local))
     } else {
         Ok(global)
     }
 }
 
-fn merge_configs(global: FbadminConfig, local: FbadminConfig) -> FbadminConfig {
+fn merge_configs(global: FireAuthConfig, local: FireAuthConfig) -> FireAuthConfig {
     let mut merged = global;
 
     for (name, local_profile) in local.profiles {
@@ -71,7 +71,7 @@ fn merge_configs(global: FbadminConfig, local: FbadminConfig) -> FbadminConfig {
 
 pub fn resolve_profile_name(
     cli_profile: &Option<String>,
-    config: &FbadminConfig,
+    config: &FireAuthConfig,
 ) -> Result<Option<String>> {
     if let Some(name) = cli_profile {
         if !config.profiles.contains_key(name) {
@@ -90,11 +90,11 @@ pub fn resolve_profile_name(
         return Ok(Some(name.clone()));
     }
 
-    if let Ok(env_profile) = std::env::var("FBADMIN_PROFILE") {
+    if let Ok(env_profile) = std::env::var("FIRE_AUTH_PROFILE") {
         if !config.profiles.contains_key(&env_profile) {
             let available: Vec<&str> = config.profiles.keys().map(|s| s.as_str()).collect();
             bail!(
-                "Profile '{}' (from FBADMIN_PROFILE) not found. Available: {}",
+                "Profile '{}' (from FIRE_AUTH_PROFILE) not found. Available: {}",
                 env_profile,
                 if available.is_empty() {
                     "(none)".to_string()
@@ -103,7 +103,7 @@ pub fn resolve_profile_name(
                 }
             );
         }
-        tracing::debug!("Using profile '{env_profile}' from FBADMIN_PROFILE env");
+        tracing::debug!("Using profile '{env_profile}' from FIRE_AUTH_PROFILE env");
         return Ok(Some(env_profile));
     }
 
@@ -131,8 +131,8 @@ pub fn resolve_connection(
         let p = config.profiles.get(name).cloned().unwrap_or_default();
         let source = if cli_profile.is_some() {
             "cli flag".to_string()
-        } else if std::env::var("FBADMIN_PROFILE").is_ok() {
-            "env:FBADMIN_PROFILE".to_string()
+        } else if std::env::var("FIRE_AUTH_PROFILE").is_ok() {
+            "env:FIRE_AUTH_PROFILE".to_string()
         } else {
             "default_profile".to_string()
         };
@@ -167,16 +167,16 @@ pub fn resolve_connection(
     })
 }
 
-pub fn save_config(config: &FbadminConfig) -> Result<()> {
-    confy::store("fbadmin", "config", config).context("Failed to save config")?;
+pub fn save_config(config: &FireAuthConfig) -> Result<()> {
+    confy::store("fire-auth", "config", config).context("Failed to save config")?;
     Ok(())
 }
 
-pub fn add_profile(config: &mut FbadminConfig, name: String, profile: Profile) {
+pub fn add_profile(config: &mut FireAuthConfig, name: String, profile: Profile) {
     config.profiles.insert(name, profile);
 }
 
-pub fn remove_profile(config: &mut FbadminConfig, name: &str) -> Result<()> {
+pub fn remove_profile(config: &mut FireAuthConfig, name: &str) -> Result<()> {
     if config.profiles.remove(name).is_none() {
         bail!("Profile '{}' not found", name);
     }
@@ -186,7 +186,7 @@ pub fn remove_profile(config: &mut FbadminConfig, name: &str) -> Result<()> {
     Ok(())
 }
 
-pub fn set_default(config: &mut FbadminConfig, name: &str) -> Result<()> {
+pub fn set_default(config: &mut FireAuthConfig, name: &str) -> Result<()> {
     if !config.profiles.contains_key(name) {
         bail!("Profile '{}' not found", name);
     }
